@@ -1,4 +1,4 @@
-# shopping-cart
+# Find Character Game
  Part of the Odin Project curriculum.
 
 ## Project Overview
