@@ -1,35 +1,50 @@
-import { DropDown, ImageWrapper, Item, TextWrapper } from "../styles/DropDownStyle";
-import zoidberg from "../assets/zoidberg.png"
 import React from "react";
-interface DropDownProps {
-  X: number,
-  Y: number,
-  display: string,
-}
-// import styled from "styled-components";
-const DropDownComponent: React.FC<DropDownProps> = ({X, Y, display}) => {
-  const [XOffset, setXOffset] = React.useState(0);
+import { v4 as uuidv4 } from 'uuid';
+import { DropDown, ImageWrapper, Item, TextWrapper } from "../styles/DropDownStyle";
+import zoidberg from "../assets/zoidberg.png";
+import brian from "../assets/brian-griffin.png";
+import link from "../assets/link.png";
+
+interface DropDownProps { X: number, Y: number, display: string };
+const DropDownComponent: React.FC<DropDownProps> = ({ X, Y, display }) => {
+  const [list, setList] = React.useState([
+    {
+      name: "Zoidberg",
+      src: zoidberg,
+    },
+    {
+      name: "Brian Griffin",
+      src: brian,
+    },
+    {
+      name: "Link",
+      src: link,
+    },
+  ])
+  const [XOffset, setXOffset] = React.useState(50);
   const [YOffset, setYOffset] = React.useState(0);
   const [displayVal, setDisplay] = React.useState("none");
-  // const setCoordinates = async(X:number, Y:number) => {
-  //   await setXOffset(X);
-  //   await setYOffset(Y);
-  // }
   React.useEffect(() => {
     setXOffset(X);
     setYOffset(Y);
     setDisplay(display);
+    console.log(X, Y, display)
   }, [X, Y, display])
   return (
-    <DropDown style={{ display: displayVal, position: "fixed", left: XOffset, top: YOffset }}>
-      <Item>
-        <ImageWrapper>
-          <img src={zoidberg} alt="zoidberg"/>
-        </ImageWrapper>
-        <TextWrapper>
-          <p>Zoidberg</p>
-        </TextWrapper>
-      </Item>
+    <DropDown style={{ top: YOffset, left: XOffset, display: displayVal }}>
+      { list.map((item) => {
+        const uuid = uuidv4();
+        return (
+          <Item key={uuid}>
+          <ImageWrapper>
+            <img src={item.src} alt="zoidberg"/>
+          </ImageWrapper>
+          <TextWrapper>
+            <p>{item.name}</p>
+          </TextWrapper>
+        </Item>
+        )
+      })}
     </DropDown>
   )
 }

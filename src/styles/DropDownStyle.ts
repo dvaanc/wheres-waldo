@@ -1,7 +1,10 @@
 import styled from "styled-components";
+// <{ display: string, left: number, top: number }>
+// display: ${ props => props.display };
+// left: ${ props => props.left };
+// top: ${ props => props.top };
 const DropDown = styled.div`
-  position: fixed;
-  display: flex;
+  position: absolute;
   flex-direction: column;
   width: 180px;
   height: 150px;
