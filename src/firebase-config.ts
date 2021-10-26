@@ -1,4 +1,4 @@
-const firebaseConfig = {
+const config = {
   apiKey: "AIzaSyCETwbX3YXvEcS8BpUxqUSIru7i3D0gBn8",
   authDomain: "where-s-waldo-9819a.firebaseapp.com",
   projectId: "where-s-waldo-9819a",
@@ -8,4 +8,4 @@ const firebaseConfig = {
   measurementId: "G-YR0BLHKNJ4"
 };
 
-export default firebaseConfig
+export default config;

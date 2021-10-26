@@ -2,13 +2,17 @@ import React from 'react';
 import { HeaderComponent as Header } from './components/HeaderComponent';
 import { GameComponent as Main } from './components/GameComponent';
 import { FooterComponent as Footer } from './components/FooterComponent';
+import LevelSelectComponent from './components/LevelSelectComponent';
 import { App } from './styles/App';
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
+
+import config from './firebase-config';
 
 function AppComponent() {
+  React.useEffect(() => {
+  })
   return (
     <App>
+      <LevelSelectComponent />
       <Header />
       <Main />
       <Footer />

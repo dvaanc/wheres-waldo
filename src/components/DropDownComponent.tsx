@@ -28,7 +28,6 @@ const DropDownComponent: React.FC<DropDownProps> = ({ X, Y, display }) => {
     setXOffset(X);
     setYOffset(Y);
     setDisplay(display);
-    console.log(X, Y, display)
   }, [X, Y, display])
   return (
     <DropDown style={{ top: YOffset, left: XOffset, display: displayVal }}>

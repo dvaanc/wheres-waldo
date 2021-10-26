@@ -9,6 +9,9 @@ const Game = styled.main`
     height: auto;
   }
 `
+const ImageWrapper = styled.div`
+
+`
 const Wrong = styled.div<{ opacity: number }>`
   position: absolute;
   top: 15%;
@@ -28,12 +31,15 @@ const Wrong = styled.div<{ opacity: number }>`
   pointer-events: none;
   transition: opacity 0.2s ease-in-out 0s;
 `
-const Target = styled.div<{ currentColour: string }>`
+const Target = styled.div<{ top: number, left: number, currentColour: string }>`
+  position: absolute;
+  top: ${props => props.top}%;
+  left: ${props => props.left}%;
   height: 50px;
   width: 50px;
-  position: absolute;
   background-color: ${ props => props.currentColour };
   border-radius: 50%;
+  z-index: 19;
 `
 
-export { Game, Wrong, Target }
+export { Game, Wrong, Target, ImageWrapper }

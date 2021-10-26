@@ -10,5 +10,5 @@ export const Header = styled.div`
   padding: 10px;
   color: #6ddbfa;
   background-color: #282c34;
-  z-index: 5
+  z-index: 5;
 `
