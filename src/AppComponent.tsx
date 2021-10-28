@@ -5,7 +5,6 @@ import { FooterComponent as Footer } from './components/FooterComponent';
 import LevelSelectComponent from './components/LevelSelectComponent';
 import { App } from './styles/App';
 
-import config from './firebase-config';
 
 function AppComponent() {
   React.useEffect(() => {
