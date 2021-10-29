@@ -24,17 +24,23 @@ const config = {
 const app = initializeApp(config);
 const db = getFirestore(app);
 
-const fetchData = async() => {
+const fetchChars = async() => {
   const coordsRef = collection(db, 'coords');
   const getCoords = await getDocs(coordsRef);
-  const coords: Array<any> = [];
+  const charList: Array<any> = [];
   await getCoords.forEach((doc) => {
+    if(doc.id === 'staticSize') return;
     const data = doc.data();
       data.id = doc.id;
-      coords.push(data);
+      charList.push(data);
   })
-  return coords;
+  return charList;
+}
+
+const fetchStaticDimensions = async() => {
+  const snap = await getDoc(doc(db, 'coords', 'staticSize'))
+  return snap.data();
 }
 
 
-export { fetchData };
+export { fetchChars, fetchStaticDimensions };
