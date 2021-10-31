@@ -4,6 +4,7 @@ import { DropDown, ImageWrapper, Item, TextWrapper } from "../styles/DropDownSty
 import zoidberg from "../assets/zoidberg.png";
 import brian from "../assets/brian-griffin.png";
 import link from "../assets/link.png";
+import { fetchCharsInfo } from './firebase';
 
 interface DropDownProps { X: number, Y: number, display: string };
 const DropDownComponent: React.FC<DropDownProps> = ({ X, Y, display }) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Game, Wrong } from "../styles/GameStyle";
 import level1 from "../assets/level1.jpg";
 import DropDownComponent from "./DropDownComponent";
-import { fetchChars, fetchStaticDimensions } from './firestore';
+import { fetchCharsData, fetchStaticDimensions } from './firebase';
 export const GameComponent:React.FC = () => {
   const [XOffset, setXOffset] = React.useState(0);
   const [YOffset, setYOffset] = React.useState(0);
@@ -10,7 +10,7 @@ export const GameComponent:React.FC = () => {
   const [toggleDropDown, setToggleDropDown] = React.useState(false);
   const [screenSize, setScreenSize]: any = React.useState({})
   const imgRef =  React.useRef<HTMLImageElement>(null);
-  const charList = fetchChars();
+  const charList = fetchCharsData();
   
   React.useEffect(() => {
     handleResize();
@@ -59,7 +59,7 @@ export const GameComponent:React.FC = () => {
       const itemSum = item.X + item.Y;
       // console.log('------------')
       // console.log('ITEMSUM: ' + itemSum);
-      if(sum <= (itemSum + 25) && sum >= (itemSum - 25)) {
+      if(sum <= (itemSum + item.radius) && sum >= (itemSum - item.radius)) {
         console.log(true);
       }
     })

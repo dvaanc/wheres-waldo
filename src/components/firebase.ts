@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite'
-
+import { getStorage, ref, listAll, getDownloadURL, } from 'firebase/storage';
 // interface char {
 //   X: number,
 //   Y: number,
@@ -23,8 +23,25 @@ const config = {
 
 const app = initializeApp(config);
 const db = getFirestore(app);
+const storage = getStorage();
+const charRef = ref(storage, 'characters/');
 
-const fetchChars = async() => {
+const fetchCharsInfo = async() => {
+  const imgCollection: Array<any> = [];
+  listAll(charRef)
+    .then((folder) =>  folder.items.forEach((img) => {
+      const imgName = img.name.replace(/\.[^/.]+$/, "");
+      const getURL = getDownloadURL(img).then((url: string) => url);
+      const URL = getURL.then((res) => res)
+      imgCollection.push({
+        name: imgName,
+        src: URL,
+      })
+    }))
+    console.log(imgCollection)
+  }
+fetchCharsInfo();
+const fetchCharsData = async() => {
   const coordsRef = collection(db, 'coords');
   const getCoords = await getDocs(coordsRef);
   const charList: Array<any> = [];
@@ -39,4 +56,4 @@ const fetchChars = async() => {
 
 const fetchStaticDimensions = async() => await getDoc(doc(db, 'coords', 'staticSize'));
 
-export { fetchChars, fetchStaticDimensions };
+export { fetchCharsData, fetchStaticDimensions, fetchCharsInfo };
