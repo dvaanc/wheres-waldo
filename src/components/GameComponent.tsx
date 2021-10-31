@@ -11,7 +11,6 @@ export const GameComponent:React.FC = () => {
   const [screenSize, setScreenSize]: any = React.useState({})
   const imgRef =  React.useRef<HTMLImageElement>(null);
   const charList = fetchChars();
-  const staticDimensions: object = fetchStaticDimensions();
   
   React.useEffect(() => {
     handleResize();
@@ -48,20 +47,22 @@ export const GameComponent:React.FC = () => {
 
   }
   const isCharAtCoords = async(X: number, Y: number) => {
-    console.log(staticDimensions)
-    // const percentage: number = staticDimensions?.height / screenSize?.height;
-    // const scaledX: number = X * percentage;
-    // const scaledY: number = Y * percentage;
-    // const sum: number = scaledX + scaledY;
-
-    // (await charList).forEach((item) => {
-    //   console.log(item.X + item.Y);
-    //   console.log(sum);
-    //   console.log('---------------------')
-    //   if(sum <= ((item.X + item.Y) - 20) && sum >= ((item.X + item.Y) + 20)) {
-    //     console.log(true);
-    //   }
-    // })
+    const staticDimensions: any = await fetchStaticDimensions().then((result) => result.data());
+    const percentage: number = staticDimensions?.height / screenSize?.height;
+    const sum: number = Math.round((X * percentage) + (Y * percentage));
+    console.log('SUM: ' + Number(sum));
+    // console.log((await charList).some((item) => {
+    //   const itemSum = item.X + item.Y;
+    //   return (sum <= itemSum - 100 && sum >= itemSum + 100);
+    // }));
+    (await charList).forEach((item) => {
+      const itemSum = item.X + item.Y;
+      // console.log('------------')
+      // console.log('ITEMSUM: ' + itemSum);
+      if(sum <= (itemSum + 25) && sum >= (itemSum - 25)) {
+        console.log(true);
+      }
+    })
   }
   const handleScroll = (e: any): void => {
 

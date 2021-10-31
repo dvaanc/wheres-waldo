@@ -37,10 +37,6 @@ const fetchChars = async() => {
   return charList;
 }
 
-const fetchStaticDimensions = async() => {
-  const snap = await getDoc(doc(db, 'coords', 'staticSize'))
-  return snap.data();
-}
-
+const fetchStaticDimensions = async() => await getDoc(doc(db, 'coords', 'staticSize'));
 
 export { fetchChars, fetchStaticDimensions };
