@@ -3,12 +3,14 @@ import { Game, Wrong } from "../styles/GameStyle";
 import level1 from "../assets/level1.jpg";
 import DropDownComponent from "./DropDownComponent";
 import { fetchCharsData, fetchStaticDimensions } from './firebase';
+
+interface ScreenSize { height: number, width: number };
 export const GameComponent:React.FC = () => {
-  const [XOffset, setXOffset] = React.useState(0);
-  const [YOffset, setYOffset] = React.useState(0);
-  const [display, setDisplay] = React.useState("none");
+  const [XOffset, setXOffset] = React.useState(0 as number);
+  const [YOffset, setYOffset] = React.useState(0 as number);
+  const [display, setDisplay] = React.useState("none" as string);
   const [toggleDropDown, setToggleDropDown] = React.useState(false);
-  const [screenSize, setScreenSize]: any = React.useState({})
+  const [screenSize, setScreenSize] = React.useState({} as ScreenSize)
   const imgRef =  React.useRef<HTMLImageElement>(null);
   const charList = fetchCharsData();
   
@@ -20,26 +22,23 @@ export const GameComponent:React.FC = () => {
 
   const handleResize = async() => {
     setScreenSize({
-      height: imgRef.current?.clientHeight,
-      width: imgRef.current?.clientWidth,
+      height: imgRef.current?.clientHeight!,
+      width: imgRef.current?.clientWidth!,
     });
-    console.log(imgRef.current?.clientHeight, imgRef.current?.clientWidth);
+    // console.log(imgRef.current?.clientHeight, imgRef.current?.clientWidth);
   };
 
-  const handleClick = async(e: any) => {
+  const handleClick = (e: React.MouseEvent): void => {
     const { offsetX: X, offsetY: Y } = e.nativeEvent;
-    await setScreenSize({
-      height: imgRef.current?.clientHeight,
-      width: imgRef.current?.clientWidth,
-    })
+    setScreenSize({ height: imgRef.current?.clientHeight!, width: imgRef.current?.clientWidth! })
     // console.log(`
     // Mouse X: ${X},  Mouse Y: ${Y}`);
     // console.log(`
     // Client height: ${imgRef.current?.clientHeight}, Client width: ${imgRef.current?.clientWidth}`)
-    await setXOffset(X + 25);
-    await setYOffset(Y - 80 );
+    setXOffset(X + 25);
+    setYOffset(Y - 80 );
 
-    // toggleDropDownMenu();
+    toggleDropDownMenu();
     isCharAtCoords(X, Y);
   }
 
@@ -50,7 +49,7 @@ export const GameComponent:React.FC = () => {
     const staticDimensions: any = await fetchStaticDimensions().then((result) => result.data());
     const percentage: number = staticDimensions?.height / screenSize?.height;
     const sum: number = Math.round((X * percentage) + (Y * percentage));
-    console.log('SUM: ' + Number(sum));
+    // console.log('SUM: ' + Number(sum));
     // console.log((await charList).some((item) => {
     //   const itemSum = item.X + item.Y;
     //   return (sum <= itemSum - 100 && sum >= itemSum + 100);
@@ -82,7 +81,7 @@ export const GameComponent:React.FC = () => {
     <Game>
       <Wrong opacity={1}>Wrong! Try again</Wrong>
       <img ref={ imgRef } draggable='false' onClick={handleClick} onScroll={handleScroll} src={level1} alt='game'/>
-      <DropDownComponent X={XOffset} Y={YOffset} display={display}/>
+      <DropDownComponent X={XOffset} Y={YOffset} display={display} checkForChar={ handleClick }/>
     </Game>
   )
 }
