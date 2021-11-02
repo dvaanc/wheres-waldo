@@ -4,45 +4,48 @@ import { DropDown, ImageWrapper, Item, TextWrapper } from "../styles/DropDownSty
 import zoidberg from "../assets/zoidberg.png";
 import brian from "../assets/brian-griffin.png";
 import link from "../assets/link.png";
+import { fetchCharsInfo } from './firebase';
 
-interface DropDownProps { 
-  X: number, 
-  Y: number, 
-  display: string, 
-  checkForChar(arg: null): void; 
-};
-const DropDownComponent: React.FC<DropDownProps> = ({ X, Y, display, checkForChar }) => {
+interface DropDownRef { charFound(): void, }
+interface DropDownProps { char: string, X: number, Y: number, display: string, checkForChar(char: string): Promise<void>, ref: React.RefObject<DropDownRef> };
+interface ItemObject { name: string, src: string, found: boolean }
+
+const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, checkForChar, ref }) => {
+  React.useEffect(() => {
+    const chars = fetchCharsInfo();
+    // console.log(chars)
+  }, [])
+
   const [list, setList] = React.useState([
-    {
-      name: "Zoidberg",
-      src: zoidberg,
-      found: false,
-    },
-    {
-      name: "Brian Griffin",
-      src: brian,
-      found: false,
-    },
-    {
-      name: "Link",
-      src: link,
-      found: false,
-    },
-  ]
-  )
-  const [XOffset, setXOffset] = React.useState(50);
-  const [YOffset, setYOffset] = React.useState(0);
-  const [displayVal, setDisplay] = React.useState("none");
+    { name: "zoidberg", src: zoidberg, found: false },
+    { name: "brian-griffin", src: brian, found: false },
+    { name: "link", src: link, found: false },
+  ] as Array<ItemObject>)
+  const [XOffset, setXOffset] = React.useState(50 as number);
+  const [YOffset, setYOffset] = React.useState(0 as number);
+  const [displayVal, setDisplay] = React.useState("none" as string);
   React.useEffect(() => {
     setXOffset(X);
     setYOffset(Y);
     setDisplay(display);
   }, [X, Y, display])
+  React.useEffect(() => {
+    charFound(char)
+  }, [char])
+  const testF = () => {
+    console.log('it worked')
+  }
+  const charFound = (char: string): void => {
+    const item  = list.find((item?) => item.name === char) as ItemObject;
+    item.found! = true;
+    setList({ ...list})
+    console.log('test')
+  }
   const handleClick = (e: React.MouseEvent): void => {
     if (e !== null && e.target instanceof HTMLElement) {
       console.log(e.target.dataset.char)
+      checkForChar(e.target.dataset.char!);
     }
-    
   }
   return (
     <DropDown style={{ top: YOffset, left: XOffset, display: displayVal }}>

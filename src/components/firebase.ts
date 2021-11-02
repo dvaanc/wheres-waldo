@@ -1,16 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite'
 import { getStorage, ref, listAll, getDownloadURL, } from 'firebase/storage';
-interface Char {
-  X: number,
-  Y: number,
-  id: string,
-  radius: number,
-}
-// interface staticDim {
-//   height: number,
-//   width: number,
-// }
 
 const config = {
   apiKey: "AIzaSyCETwbX3YXvEcS8BpUxqUSIru7i3D0gBn8",
@@ -32,16 +22,20 @@ const fetchCharsInfo = async() => {
   await listAll(charRef)
     .then((folder) =>  folder.items.forEach((img) => {
       const imgName = img.name.replace(/\.[^/.]+$/, "");
-      const getURL = getDownloadURL(img).then((url: string) => url);
+      const getURL = getDownloadURL(img).then((url: string) => url)
       const URL = getURL.then((res) => res)
+      console.log(URL);
       imgCollection.push({
         name: imgName,
         src: URL,
       })
     }))
+    .then((res) => {
+      console.log(res)
+    })
+
     return imgCollection;
   }
-fetchCharsInfo();
 const fetchCharsData = async() => {
   const coordsRef = collection(db, 'coords');
   const getCoords = await getDocs(coordsRef);
