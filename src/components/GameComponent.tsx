@@ -4,7 +4,6 @@ import level1 from "../assets/level1.jpg";
 import DropDownComponent from "./DropDownComponent";
 import { fetchCharsData, fetchStaticDimensions } from './firebase';
 
-interface DropDownRef { charFound(): void }
 interface ScreenSize { height: number, width: number };
 interface Coords { X: number, Y: number };
 
@@ -17,7 +16,6 @@ export const GameComponent:React.FC = () => {
   const [coords, setCoords] = React.useState({} as Coords);
   const [charFound, setCharFound] = React.useState('' as string);
   const imgRef =  React.useRef<HTMLImageElement>(null);
-  const dropDownRef = React.useRef<DropDownRef>(null);
   const charList = fetchCharsData();
   
   React.useEffect(() => {
@@ -56,7 +54,6 @@ export const GameComponent:React.FC = () => {
     const sum: number = Math.round((coords.X * percentage) + (coords.Y * percentage));
     const item = (await charList).find((item) => item.id === char);
     const itemSum = item.X + item.Y;
-    console.log(itemSum);
     if(sum <= (itemSum + item.radius) && sum >= (itemSum - item.radius)) {
     console.log(char + ' found!');
     setCharFound(char);
@@ -90,7 +87,6 @@ export const GameComponent:React.FC = () => {
       />
       <DropDownComponent 
       char={ charFound } 
-      ref={ dropDownRef }
       X={ XOffset } 
       Y={ YOffset } 
       display={ display } 

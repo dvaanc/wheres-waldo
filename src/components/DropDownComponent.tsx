@@ -6,13 +6,12 @@ import brian from "../assets/brian-griffin.png";
 import link from "../assets/link.png";
 import { fetchCharsInfo } from './firebase';
 
-interface DropDownRef { charFound(): void, }
-interface DropDownProps { char: string, X: number, Y: number, display: string, checkForChar(char: string): Promise<void>, ref: React.RefObject<DropDownRef> };
+interface DropDownProps { char: string, X: number, Y: number, display: string, checkForChar(char: string): Promise<void> };
 interface ItemObject { name: string, src: string, found: boolean }
 
-const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, checkForChar, ref }) => {
+const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, checkForChar }) => {
   React.useEffect(() => {
-    const chars = fetchCharsInfo();
+    // const chars = fetchCharsInfo();
     // console.log(chars)
   }, [])
 
@@ -30,37 +29,55 @@ const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, check
     setDisplay(display);
   }, [X, Y, display])
   React.useEffect(() => {
-    charFound(char)
+    charFound(char);
   }, [char])
-  const testF = () => {
-    console.log('it worked')
-  }
+  React.useEffect(() => {
+    console.log(list)
+  }, [list])
   const charFound = (char: string): void => {
-    const item  = list.find((item?) => item.name === char) as ItemObject;
-    item.found! = true;
-    setList({ ...list})
-    console.log('test')
+    if(char === undefined || '') return;
+    const index: number = list.findIndex((item) => item.name === char);
+    if(list[index]?.found === undefined) return;
+    if(list[index]?.found !== undefined) list[index].found = true;
+    console.log(list[index]);
+    setList([ ...list])
+  }
+  const isGameOver = (arr: Array<ItemObject>) => {
+    return arr.every((item) => item.found! === true);
   }
   const handleClick = (e: React.MouseEvent): void => {
     if (e !== null && e.target instanceof HTMLElement) {
-      console.log(e.target.dataset.char)
-      checkForChar(e.target.dataset.char!);
+      const charName: string = e.target.dataset.char || '';
+      checkForChar(charName);
     }
   }
   return (
     <DropDown style={{ top: YOffset, left: XOffset, display: displayVal }}>
       { list.map((item) => {
         const uuid = uuidv4();
-        return (
-          <Item key={ uuid } data-char={ item.name } onClick={ handleClick }>
-          <ImageWrapper>
-            <img src={ item.src } data-char={ item.name } alt="zoidberg"/>
-          </ImageWrapper>
-          <TextWrapper data-char={ item.name }>
-            <p data-char={ item.name }>{ item.name }</p>
-          </TextWrapper>
-        </Item>
-        )
+        if(item === undefined || '' || null) return;
+        if(item.found) {
+          return (
+            <Item style={{ pointerEvents: "none", textDecoration: "line-through" }} key={ uuid } data-char={ item.name } onClick={ handleClick }>
+            <ImageWrapper style={{ pointerEvents: "none", textDecoration: "line-through" }}>
+              <img src={ item.src } data-char={ item.name } alt="zoidberg"/>
+            </ImageWrapper>
+            <TextWrapper data-char={ item.name }>
+              <p data-char={ item.name }>{ item.name }</p>
+            </TextWrapper>
+          </Item>
+          )
+        }
+          return (
+            <Item key={ uuid } data-char={ item.name } onClick={ handleClick }>
+            <ImageWrapper>
+              <img src={ item.src } data-char={ item.name } alt="zoidberg"/>
+            </ImageWrapper>
+            <TextWrapper data-char={ item.name }>
+              <p data-char={ item.name }>{ item.name }</p>
+            </TextWrapper>
+          </Item>
+          )
       })}
     </DropDown>
   )
