@@ -7,7 +7,7 @@ import { fetchCharsData, fetchStaticDimensions, fetchServerTime } from './fireba
 interface ScreenSize { height: number, width: number };
 interface Coords { X: number, Y: number };
 
-export const GameComponent:React.FC = () => {
+const GameComponent:React.FC = () => {
   const [XOffset, setXOffset] = React.useState(0 as number);
   const [YOffset, setYOffset] = React.useState(0 as number);
   const [display, setDisplay] = React.useState("none" as string);
@@ -106,3 +106,5 @@ export const GameComponent:React.FC = () => {
     </Game>
   )
 }
+
+export default GameComponent;

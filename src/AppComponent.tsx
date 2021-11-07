@@ -1,19 +1,24 @@
 import React from 'react';
 import { HeaderComponent as Header } from './components/HeaderComponent';
-import { GameComponent as Main } from './components/GameComponent';
+import GameComponent from './components/GameComponent';
 import { FooterComponent as Footer } from './components/FooterComponent';
 import LevelSelectComponent from './components/LevelSelectComponent';
+import GameOverComponent from './components/GameOver';
 import { App } from './styles/App';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
 
 function AppComponent() {
-  React.useEffect(() => {
-  })
   return (
     <App>
-      <LevelSelectComponent />
+      <Router>
       <Header />
-      <Main />
+      <GameOverComponent />
+        <Switch>
+          <Route exact path='/' component={ GameComponent }/>
+        </Switch>
+      {/* <LevelSelectComponent /> */}
+      </Router>
       <Footer />
     </App>
   );

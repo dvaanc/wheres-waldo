@@ -28,4 +28,8 @@ export const Header = styled.div`
       cursor: pointer;
     }
   }
+  & a {
+    color: #6DDBFA;
+    text-decoration: none;
+  }
 `
