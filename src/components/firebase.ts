@@ -1,6 +1,8 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore/lite'
+import { getFirestore, collection, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc, Timestamp, FieldValue } from 'firebase/firestore/lite'
 import { getStorage, ref, listAll, getDownloadURL, } from 'firebase/storage';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 const config = {
   apiKey: "AIzaSyCETwbX3YXvEcS8BpUxqUSIru7i3D0gBn8",
@@ -16,7 +18,6 @@ const app = initializeApp(config);
 const db = getFirestore(app);
 const storage = getStorage();
 const charRef = ref(storage, 'characters/');
-
 const fetchCharsInfo = async() => {
   const imgCollection = [] as any;
   await listAll(charRef)
@@ -30,10 +31,9 @@ const fetchCharsInfo = async() => {
         src: URL,
       })
     }))
-    .then((res) => {
-      console.log(res)
-    })
-
+    // .then((res) => {
+    //   console.log(res)
+    // })
     return imgCollection;
   }
 const fetchCharsData = async() => {
@@ -48,6 +48,8 @@ const fetchCharsData = async() => {
   return charList;
 }
 
+const fetchServerTime = () => Timestamp.now().seconds;
+
 const fetchStaticDimensions = async() => await getDoc(doc(db, 'coords', 'staticSize'));
 
-export { fetchCharsData, fetchStaticDimensions, fetchCharsInfo, };
+export { fetchCharsData, fetchStaticDimensions, fetchCharsInfo, fetchServerTime };

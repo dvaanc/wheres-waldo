@@ -2,7 +2,7 @@ import React from 'react';
 import { Game, Wrong } from "../styles/GameStyle";
 import level1 from "../assets/level1.jpg";
 import DropDownComponent from "./DropDownComponent";
-import { fetchCharsData, fetchStaticDimensions } from './firebase';
+import { fetchCharsData, fetchStaticDimensions, fetchServerTime } from './firebase';
 
 interface ScreenSize { height: number, width: number };
 interface Coords { X: number, Y: number };
@@ -15,9 +15,14 @@ export const GameComponent:React.FC = () => {
   const [screenSize, setScreenSize] = React.useState({} as ScreenSize);
   const [coords, setCoords] = React.useState({} as Coords);
   const [charFound, setCharFound] = React.useState('' as string);
+  const [startTimer, setStartTimer] = React.useState(0 as number)
   const imgRef =  React.useRef<HTMLImageElement>(null);
   const charList = fetchCharsData();
-  
+  React.useEffect(() => {
+    // start timer
+    fetchServerTime();
+    setStartTimer(fetchServerTime());
+  }, [])
   React.useEffect(() => {
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -44,7 +49,12 @@ export const GameComponent:React.FC = () => {
     setYOffset(Y - 80 );
     toggleDropDownMenu();
   }
-
+  const endGame = () => {
+    console.log('game over')
+    const endTime = fetchServerTime();
+    const elapsedTime = Math.round((endTime - startTimer + Number.EPSILON ) * 100) / 100;
+    console.log(elapsedTime)
+  }
   const handleOnHandle = () => {
 
   }
@@ -91,6 +101,7 @@ export const GameComponent:React.FC = () => {
       Y={ YOffset } 
       display={ display } 
       checkForChar={ isCharAtCoords }
+      endGame = { endGame }
       />
     </Game>
   )

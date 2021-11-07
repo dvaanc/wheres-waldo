@@ -6,10 +6,10 @@ import brian from "../assets/brian-griffin.png";
 import link from "../assets/link.png";
 import { fetchCharsInfo } from './firebase';
 
-interface DropDownProps { char: string, X: number, Y: number, display: string, checkForChar(char: string): Promise<void> };
+interface DropDownProps { char: string, X: number, Y: number, display: string, checkForChar(char: string): Promise<void>, endGame(): void };
 interface ItemObject { name: string, src: string, found: boolean }
 
-const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, checkForChar }) => {
+const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, checkForChar, endGame }) => {
   React.useEffect(() => {
     // const chars = fetchCharsInfo();
     // console.log(chars)
@@ -32,7 +32,9 @@ const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, check
     charFound(char);
   }, [char])
   React.useEffect(() => {
-    console.log(list)
+    if(isGameOver(list)) {
+      endGame()
+    }
   }, [list])
   const charFound = (char: string): void => {
     if(char === undefined || '') return;
@@ -43,7 +45,7 @@ const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, check
     setList([ ...list])
   }
   const isGameOver = (arr: Array<ItemObject>) => {
-    return arr.every((item) => item.found! === true);
+    return arr.every((item) => item.found === true);
   }
   const handleClick = (e: React.MouseEvent): void => {
     if (e !== null && e.target instanceof HTMLElement) {
@@ -55,7 +57,7 @@ const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, check
     <DropDown style={{ top: YOffset, left: XOffset, display: displayVal }}>
       { list.map((item) => {
         const uuid = uuidv4();
-        if(item === undefined || '' || null) return;
+        if(item === undefined || '' || null) return null;
         if(item.found) {
           return (
             <Item style={{ pointerEvents: "none", textDecoration: "line-through" }} key={ uuid } data-char={ item.name } onClick={ handleClick }>
