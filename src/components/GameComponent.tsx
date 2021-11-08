@@ -2,6 +2,7 @@ import React from 'react';
 import { Game, Wrong } from "../styles/GameStyle";
 import level1 from "../assets/level1.jpg";
 import DropDownComponent from "./DropDownComponent";
+import GameOverComponent from './GameOver';
 import { fetchCharsData, fetchStaticDimensions, fetchServerTime } from './firebase';
 
 interface ScreenSize { height: number, width: number };
@@ -15,7 +16,8 @@ const GameComponent:React.FC = () => {
   const [screenSize, setScreenSize] = React.useState({} as ScreenSize);
   const [coords, setCoords] = React.useState({} as Coords);
   const [charFound, setCharFound] = React.useState('' as string);
-  const [startTimer, setStartTimer] = React.useState(0 as number)
+  const [startTimer, setStartTimer] = React.useState(0 as number);
+  const [modal, setModal] = React.useState(false as boolean);
   const imgRef =  React.useRef<HTMLImageElement>(null);
   const charList = fetchCharsData();
   React.useEffect(() => {
@@ -86,7 +88,8 @@ const GameComponent:React.FC = () => {
 
   return (
     <Game>
-      <Wrong opacity={0}>Wrong! Try again</Wrong>
+      <GameOverComponent  modal={ modal } />
+      <Wrong opacity={ 0 }>Wrong! Try again</Wrong>
       <img 
       ref={ imgRef } 
       draggable='false' 
