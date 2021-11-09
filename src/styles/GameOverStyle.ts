@@ -15,8 +15,8 @@ const Modal = styled.div<{ enablePointer: string, show: number}>`
   pointer-events: ${props => props.enablePointer};
   transition: opacity 0.2s ease;
 `
-const ModalContent = styled.div`
-  display: flex;
+const ModalContent = styled.div<{ display: string }>`
+  display: ${ props => props.display };
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -33,8 +33,8 @@ const rippleAnimation = keyframes`
 const Loader = styled.div<{ showLoader: string }>`
   display: ${props => props.showLoader};
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 150px;
+  height: 150px;
   & div {
     position: absolute;
     border: 4px solid #6DDBFA;

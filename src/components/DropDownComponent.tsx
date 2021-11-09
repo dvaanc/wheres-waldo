@@ -6,15 +6,18 @@ import brian from "../assets/brian-griffin.png";
 import link from "../assets/link.png";
 import { fetchCharsInfo } from './firebase';
 
-interface DropDownProps { char: string, X: number, Y: number, display: string, checkForChar(char: string): Promise<void>, endGame(): void };
-interface ItemObject { name: string, src: string, found: boolean }
+interface DropDownProps { 
+  char: string, 
+  X: number, 
+  Y: number, 
+  display: string,
+  reset: boolean,
+  checkForChar(char: string): Promise<void>, 
+  endGame(): void,
+};
+interface ItemObject { name: string, src: string, found: boolean, }
 
-const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, checkForChar, endGame }) => {
-  React.useEffect(() => {
-    // const chars = fetchCharsInfo();
-    // console.log(chars)
-  }, [])
-
+const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, reset, checkForChar, endGame }) => {
   const [list, setList] = React.useState([
     { name: "zoidberg", src: zoidberg, found: false },
     { name: "brian-griffin", src: brian, found: false },
@@ -33,7 +36,7 @@ const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, check
   }, [char])
   React.useEffect(() => {
     if(isGameOver(list)) {
-      endGame()
+      endGame();
     }
   }, [list])
   const charFound = (char: string): void => {
@@ -52,6 +55,9 @@ const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, check
       const charName: string = e.target.dataset.char || '';
       checkForChar(charName);
     }
+  }
+  const resetList = (): void => {
+
   }
   return (
     <DropDown style={{ top: YOffset, left: XOffset, display: displayVal }}>
