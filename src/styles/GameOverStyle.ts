@@ -32,7 +32,9 @@ const rippleAnimation = keyframes`
 `
 const Loader = styled.div<{ showLoader: string }>`
   display: ${props => props.showLoader};
-  position: relative;
+  position: fixed;
+  top: 50%;
+  left: 50%;
   width: 150px;
   height: 150px;
   & div {

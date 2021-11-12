@@ -8,7 +8,7 @@ export const HeaderComponent = () => {
           <Link to='/'> HOME</Link>
         </li>
         <li>
-        <Link to='/'> LEADERBOARD </Link>
+        <Link to='/leaderboard'> LEADERBOARD </Link>
         </li>
       </ul>
       <h1>Photo Tagging Game</h1>

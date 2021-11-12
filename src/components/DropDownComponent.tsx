@@ -35,10 +35,11 @@ const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, reset
     charFound(char);
   }, [char])
   React.useEffect(() => {
-    if(isGameOver(list)) {
-      endGame();
-    }
+    if(isGameOver(list)) endGame();
   }, [list])
+  React.useEffect(() => {
+    if(reset) resetList();
+  }, [reset])
   const charFound = (char: string): void => {
     if(char === undefined || '') return;
     const index: number = list.findIndex((item) => item.name === char);
@@ -57,7 +58,9 @@ const DropDownComponent: React.FC<DropDownProps> = ({ char, X, Y, display, reset
     }
   }
   const resetList = (): void => {
-
+    const resetList = list;
+    resetList.forEach((item) => item.found = false)
+    setList([...resetList]);
   }
   return (
     <DropDown style={{ top: YOffset, left: XOffset, display: displayVal }}>

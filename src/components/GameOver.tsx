@@ -1,5 +1,6 @@
 import { Modal, ModalContent, Loader, Top, Mid, Bot } from '../styles/GameOverStyle';
 import React from 'react';
+import { submitUserScore } from './firebase';
 import 'styled-components';
 
 interface ModalProps { opacity: number, pointerEvents: string, }
@@ -9,24 +10,38 @@ const GameOverComponent:React.FC<GameOverProps> = ({ modal, elapsedTime, restart
   const [showLoader, setShowLoader] = React.useState('none' as string);
   const [totalTime, setTotalTime] = React.useState(0 as number);
   const [showModalContent, setShowModalContent] = React.useState( 'none' as string);
+  const [user, setUser] = React.useState('' as string)
   React.useEffect(() => { 
-    modal ? displayModal() : hideModal() 
     if(modal) {
-      setShowLoader('inline-block')
+      displayModal();
+      setShowLoader('inline-block');
       setTimeout(() => {
         setShowLoader('none');
         setShowModalContent('flex');
-        displayModal();
       }, 3000);
     }
-    if(!modal) {
-      hideModal();
-    }
+    if(!modal) hideModal();
   },[modal]);
   React.useEffect(() => { setTotalTime(elapsedTime) }, [elapsedTime]);
   const displayModal = () => setShowModal({ opacity: 1, pointerEvents: 'autp' });
   const hideModal = () => setShowModal({ opacity: 0, pointerEvents: 'none' });
   const submitScore = () => {
+    if(user === '') return 
+    if(user !== '') {
+      submitUserScore(user, totalTime);
+      reset();
+    }
+
+  }
+  const handleChange = (e: React.ChangeEvent): void => {
+    const target = e.target as HTMLInputElement;
+    setUser(target.value);
+  }
+  const reset = (): void => {
+    hideModal(); 
+    setShowModalContent('none');
+    setShowLoader('none');
+    restartGame();
   }
   return (
     <Modal enablePointer={ showModal.pointerEvents } show={ showModal.opacity } >
@@ -39,11 +54,11 @@ const GameOverComponent:React.FC<GameOverProps> = ({ modal, elapsedTime, restart
         </Top>
         <Mid>
           <p>Please enter your username:</p>
-          <input type="text" />
+          <input type="text"value={ user }  onChange={ handleChange }/>
         </Mid>
         <Bot>
-          <button onClick={() => { hideModal(); restartGame() }}>Cancel</button>
-          <button onClick= { submitScore } >Submit Score</button>
+          <button onClick={ reset }>Restart</button>
+          <button onClick= { submitScore }>Submit Score</button>
         </Bot>
       </ModalContent>
     </Modal>

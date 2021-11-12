@@ -4,7 +4,6 @@ import level1 from "../assets/level1.jpg";
 import DropDownComponent from "./DropDownComponent";
 import GameOverComponent from './GameOver';
 import { fetchCharsData, fetchStaticDimensions, fetchServerTime } from './firebase';
-import { StructuredType } from 'typescript';
 
 interface ScreenSize { height: number, width: number };
 interface Coords { X: number, Y: number };
@@ -27,15 +26,9 @@ const GameComponent:React.FC = () => {
   const [endTimer, setEndTimer] = React.useState(0 as number);
   const [modal, setModal] = React.useState(false as boolean);
   //wrong component
-  const [showWrong, setShowWrong] = React.useState({
-    opacity: 0,
-    char: '',
-  });
+  const [showWrong, setShowWrong] = React.useState({ opacity: 0, char: '', });
   //correct component
-  const [showCorrect, setShowCorrect] = React.useState({
-    opacity: 0,
-    char: '',
-  });
+  const [showCorrect, setShowCorrect] = React.useState({ opacity: 0, char: '', });
   const imgRef =  React.useRef<HTMLImageElement>(null);
   const charList = fetchCharsData();
   React.useEffect(() => {
@@ -53,16 +46,11 @@ const GameComponent:React.FC = () => {
       height: imgRef.current?.clientHeight!,
       width: imgRef.current?.clientWidth!,
     });
-    // console.log(imgRef.current?.clientHeight, imgRef.current?.clientWidth);
   };
   const handleClick = (e: React.MouseEvent): void => {
     const { offsetX: X, offsetY: Y } = e.nativeEvent;
     setCoords({ X: X, Y: Y })
     setScreenSize({ height: imgRef.current?.clientHeight!, width: imgRef.current?.clientWidth! })
-    // console.log(`
-    // Mouse X: ${X},  Mouse Y: ${Y}`);
-    // console.log(`
-    // Client height: ${imgRef.current?.clientHeight}, Client width: ${imgRef.current?.clientWidth}`)
     setXOffset(X + 25);
     setYOffset(Y - 80 );
     toggleDropDownMenu();
@@ -91,7 +79,7 @@ const GameComponent:React.FC = () => {
     toggleWrong(char);
     toggleDropDownMenu();
   };
-  const toggleDropDownMenu = () => {
+  const toggleDropDownMenu = (): void => {
     if(!toggleDropDown) {
       setDisplay("block");
       setToggleDropDown(true);
@@ -101,17 +89,16 @@ const GameComponent:React.FC = () => {
       setToggleDropDown(false);
     };
   };
-  const toggleGameOver = () => {
-    if(!modal) {
-
-    };
-  };
   const restartGame = (): void => {
     setStartTimer(0);
     setEndTimer(0);
     setModal(false);
     setDisplay('none');
-
+    setReset(true);
+    setStartTimer(fetchServerTime());
+    setTimeout(() => {
+      setReset(false);
+    }, 2000)
   };
   const toggleWrong = (str: string): void => {
     setShowWrong({ opacity: 1, char: str, });

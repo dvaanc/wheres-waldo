@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, getDoc, doc, setDoc, deleteDoc, updateDoc, Timestamp, FieldValue } from 'firebase/firestore/lite'
+import { getFirestore, collection, getDocs, getDoc, doc, setDoc, Timestamp } from 'firebase/firestore/lite'
 import { getStorage, ref, listAll, getDownloadURL, } from 'firebase/storage';
-import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 
 const config = {
@@ -13,7 +12,6 @@ const config = {
   appId: "1:48667775749:web:63a2b3f3b938730c615d6c",
   measurementId: "G-YR0BLHKNJ4"
 };
-
 const app = initializeApp(config);
 const db = getFirestore(app);
 const storage = getStorage();
@@ -31,11 +29,11 @@ const fetchCharsInfo = async() => {
         src: URL,
       })
     }))
-    // .then((res) => {
-    //   console.log(res)
-    // })
     return imgCollection;
   }
+const submitUserScore = async(user: string, time: number) => {
+  await setDoc(doc(db, 'leaderboard', user), { time });
+}
 const fetchCharsData = async() => {
   const coordsRef = collection(db, 'coords');
   const getCoords = await getDocs(coordsRef);
@@ -44,12 +42,23 @@ const fetchCharsData = async() => {
     if(doc.id === 'staticSize') return;
     const data = doc.data();
       charList.push(data);
-  })
+  });
   return charList;
+};
+const fetchLeaderboard = async() => {
+  const leaderboardRef = collection(db, 'leaderboard');
+  const getLeaderboard = await getDocs(leaderboardRef);
+  const leaderboard: Array<any> = [];
+  await getLeaderboard.forEach((doc) => {
+    const data = doc.data();
+    const obj = { time: data.time, name: doc.id }
+    console.log(obj);
+    leaderboard.push(obj);
+  });
+  return leaderboard;
 }
-
+fetchLeaderboard();
 const fetchServerTime = () => Timestamp.now().seconds;
-
 const fetchStaticDimensions = async() => await getDoc(doc(db, 'coords', 'staticSize'));
 
-export { fetchCharsData, fetchStaticDimensions, fetchCharsInfo, fetchServerTime };
+export { fetchCharsData, fetchStaticDimensions, fetchCharsInfo, fetchServerTime, submitUserScore, fetchLeaderboard };
