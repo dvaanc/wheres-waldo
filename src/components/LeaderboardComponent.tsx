@@ -1,30 +1,44 @@
 import Leaderboard from "../styles/LeaderboardStyle";
 import { fetchLeaderboard } from "./firebase";
 import React from "react";
+import { Loader } from '../styles/GameOverStyle';
+import { uuid } from 'uuidv4';
+
 const LeaderboardComponent = () => {
   const [leaderboard, setLeaderboard] = React.useState([] as any);
-  const data = fetchLeaderboard();
+  const [isLoaded, setIsLoaded] = React.useState(false);
   React.useEffect(() => {
-    const leader = async() => {
-      const dataL = await fetchLeaderboard();
-      setLeaderboard(dataL);
-    }
+    setTimeout(() => {
+      fetchLeaderboard().then((res) => {
+        const sorted = res.sort((a, b) => a.time - b.time)
+        setLeaderboard(sorted);
+        setIsLoaded(true);
+      }, (error) => console.log(error) )
+    }, 2000)
+    
   }, [])
-  return (
-    <Leaderboard>
-      <ul>
-      { leaderboard.map((item: any) => {
-        return (
-          <li>
-            <h4>{ item.name }</h4>
-            <p>{ item.time }s</p>
-          </li>
-        )
-      })}
-
-      </ul>
-
-    </Leaderboard>
-  )
+  if(!isLoaded) {
+    return (
+      <Leaderboard>
+        Fetching scores....
+        <Loader showLoader='inline-block'><div/><div/></Loader>
+      </Leaderboard>
+    )
+  }
+    return (
+      <Leaderboard>
+        <ul>
+          <h1>Leaderboard</h1>
+        { leaderboard.map((item: any) => {
+          return (
+            <li key={uuid()}>
+              <h4>{ (leaderboard.indexOf(item) + 1) }. { item.name }</h4>
+              <p>{ item.time }s</p>
+            </li>
+          )
+        })}
+        </ul>
+      </Leaderboard>
+    )
 }
 export default LeaderboardComponent;

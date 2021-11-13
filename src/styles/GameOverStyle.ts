@@ -37,6 +37,7 @@ const Loader = styled.div<{ showLoader: string }>`
   left: 50%;
   width: 150px;
   height: 150px;
+  z-index: 9999;
   & div {
     position: absolute;
     border: 4px solid #6DDBFA;

@@ -12,7 +12,7 @@ export const Header = styled.div`
   width: 100vw;
   padding: 10px;
   color: #6ddbfa;
-  background-color: #282c34;
+  background-color: #20232A;
   z-index: 5;
   & ul {
     display: flex;

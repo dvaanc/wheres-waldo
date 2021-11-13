@@ -52,12 +52,10 @@ const fetchLeaderboard = async() => {
   await getLeaderboard.forEach((doc) => {
     const data = doc.data();
     const obj = { time: data.time, name: doc.id }
-    console.log(obj);
     leaderboard.push(obj);
   });
   return leaderboard;
 }
-fetchLeaderboard();
 const fetchServerTime = () => Timestamp.now().seconds;
 const fetchStaticDimensions = async() => await getDoc(doc(db, 'coords', 'staticSize'));
 
