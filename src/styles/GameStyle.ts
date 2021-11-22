@@ -5,7 +5,7 @@ const Game = styled.main`
   background-color: #464646;
   & img {
     user-select: none;
-    max-width: 100%;
+    width: 100%;
     height: auto;
   }
 `

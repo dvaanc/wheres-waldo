@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Leaderboard = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   background-color: #282C34;
   display: flex;

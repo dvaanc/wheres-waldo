@@ -9,7 +9,7 @@ export const Header = styled.div`
   justify-content: center;
   align-items: center;
   height: 80px;
-  width: 100vw;
+  width: 100%;
   padding: 10px;
   color: #6ddbfa;
   background-color: #20232A;
