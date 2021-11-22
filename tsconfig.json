@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "build",
+    "outDir": "./build",
     "target": "es5",
-    "watch": true,
+    "watch": false,
     "lib": [
       "dom",
       "dom.iterable",
