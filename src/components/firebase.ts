@@ -1,7 +1,9 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, getDoc, doc, setDoc, Timestamp } from 'firebase/firestore/lite'
 import { getStorage, ref, listAll, getDownloadURL, } from 'firebase/storage';
+import { getAuth, signInAnonymously } from 'firebase/auth'
 import 'firebase/firestore';
+
 
 const config = {
   apiKey: "AIzaSyCETwbX3YXvEcS8BpUxqUSIru7i3D0gBn8",
@@ -12,7 +14,16 @@ const config = {
   appId: "1:48667775749:web:63a2b3f3b938730c615d6c",
   measurementId: "G-YR0BLHKNJ4"
 };
+
 const app = initializeApp(config);
+const auth = getAuth();
+signInAnonymously(auth)
+  .then(() => {
+    console.log('user authenticated anonymously');
+  })
+  .catch((err) => {
+    console.log(err.code + err.message);
+  });
 const db = getFirestore(app);
 const storage = getStorage();
 const charRef = ref(storage, 'characters/');
